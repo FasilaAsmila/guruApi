@@ -4,17 +4,17 @@ import styled from 'styled-components';
 const Sidebar = styled.div`
   width: 300px;
   height: 100vh;
-  background-color: #41607a;
+  background-color: #415f7a;
   padding: 20px;
   border-left: 2px solid #0c98ff;
   position: fixed;
   right: 0;
   top: 0;
   color: white;
-   overflow-y: auto; 
+  overflow-y: auto; 
 `;
+
 const ProviderContainer = styled.div`
-  // padding: 10px;
   cursor: pointer;
 
   &:hover {
@@ -29,6 +29,7 @@ const ProviderItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   &:hover {
     background-color: #192531;
     color: white;
@@ -40,9 +41,8 @@ const APIItem = styled.div`
   align-items: center;
   padding: 20px;
   font-size: 14px;
-  color: #333;
+  color: white;
   cursor: pointer;
-  color: white
 `;
 
 const Logo = styled.img`
@@ -73,7 +73,6 @@ const APIProviderList: React.FC<APIProviderListProps> = ({ onProviderSelect, onA
   const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
   const [apis, setApis] = useState<{ [key: string]: APIData }>({});
   const [loading, setLoading] = useState<boolean>(true);
- 
 
   useEffect(() => {
     fetch('https://api.apis.guru/v2/providers.json')
@@ -116,8 +115,7 @@ const APIProviderList: React.FC<APIProviderListProps> = ({ onProviderSelect, onA
   };
 
   const handleAPIItemClick = (provider: string, apiKey: string) => {
-   
-    onAPISelect(provider, apiKey); // Call the passed prop function
+    onAPISelect(provider, apiKey); 
   };
 
   if (loading) {
@@ -131,11 +129,8 @@ const APIProviderList: React.FC<APIProviderListProps> = ({ onProviderSelect, onA
   return (
     <Sidebar>
       <h3>Select Provider</h3>
-      {providers.map((provider, index) => (
-<ProviderContainer>
-
-
-        <div key={index}>
+      {providers.map((provider) => (
+        <ProviderContainer key={provider}>
           <ProviderItem onClick={() => handleProviderClick(provider)}>
             {provider}
             <Arrow>{selectedProvider === provider ? '▲' : '▼'}</Arrow>
@@ -144,10 +139,10 @@ const APIProviderList: React.FC<APIProviderListProps> = ({ onProviderSelect, onA
           {/* Display API titles only when the provider is selected */}
           {selectedProvider === provider && (
             <>
-              {Object.keys(apis).map((apiKey, index) => (
+              {Object.keys(apis).map((apiKey) => (
                 <APIItem
-                  key={index}
-                  onClick={() => handleAPIItemClick(provider, apiKey)} // Separate function to handle click
+                  key={apiKey} 
+                  onClick={() => handleAPIItemClick(provider, apiKey)} 
                 >
                   {apis[apiKey].logoUrl && (
                     <Logo src={apis[apiKey].logoUrl} alt={`${apis[apiKey].title} logo`} />
@@ -157,7 +152,6 @@ const APIProviderList: React.FC<APIProviderListProps> = ({ onProviderSelect, onA
               ))}
             </>
           )}
-        </div>
         </ProviderContainer>
       ))}
     </Sidebar>
